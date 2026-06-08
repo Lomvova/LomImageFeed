@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
     private var avatarImageView = UIImageView()
     private var nameLabel = UILabel()
@@ -17,9 +17,7 @@ class ProfileViewController: UIViewController {
         setupDescriptionLabel()
         setupLogoutButton()
     }
-    
     // MARK: - Setup
-    
     private func setupAvatarImage() {
         avatarImageView.image = UIImage(resource: .avatar)
         avatarImageView.clipsToBounds = true
@@ -115,9 +113,7 @@ class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor)
         ])
     }
-    
     // MARK: - Actions
-    
     @objc private func didTapLogoutButton() { }
     
 }
