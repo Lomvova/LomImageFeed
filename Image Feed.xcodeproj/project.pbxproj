@@ -23,6 +23,7 @@
 		8FB291BB2902DA4C00A53129 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB291BA2902DA4C00A53129 /* OAuth2TokenStorage.swift */; };
 		8FB291BE2902DAB100A53129 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB291BD2902DAB100A53129 /* SplashViewController.swift */; };
 		96D60AA62E01A01F00FCCB08 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D60AA52E01A01F00FCCB08 /* WebKit.framework */; };
+		BAF9A2E1301E1CB600387169 /* URLSession+data.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF9A2E0301E1CB600387169 /* URLSession+data.swift */; };
 		BAFF0EE1301E07F400223C76 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAFF0EE0301E07F400223C76 /* ProfileService.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		8FB291BA2902DA4C00A53129 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		8FB291BD2902DAB100A53129 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		96D60AA52E01A01F00FCCB08 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		BAF9A2E0301E1CB600387169 /* URLSession+data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift"; sourceTree = "<group>"; };
 		BAFF0EE0301E07F400223C76 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +147,7 @@
 			children = (
 				8FB291B82902DA2100A53129 /* OAuth2Service.swift */,
 				8FB291BA2902DA4C00A53129 /* OAuth2TokenStorage.swift */,
+				BAF9A2E0301E1CB600387169 /* URLSession+data.swift */,
 			);
 			path = OAuth2;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAF9A2E1301E1CB600387169 /* URLSession+data.swift in Sources */,
 				7D9CFA4328DDEE7F00D971A7 /* AppDelegate.swift in Sources */,
 				7D9CFA4528DDEE7F00D971A7 /* SceneDelegate.swift in Sources */,
 				8F83109D28E459BD00BA471F /* ProfileViewController.swift in Sources */,

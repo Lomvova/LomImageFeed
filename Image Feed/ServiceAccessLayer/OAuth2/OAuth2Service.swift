@@ -1,12 +1,5 @@
 import Foundation
 
-enum NetworkError: Error {
-    case invalidRequest
-    case httpStatusCode(Int)
-    case unknownHTTPResponse
-    case decodingError(Error)
-}
-
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
@@ -53,7 +46,7 @@ final class OAuth2Service {
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         guard lastCode != code else {
-            completion(.failure(AuthServiceError.invalidRequest))
+            completion(.failure(NetworkError.invalidRequest))
             return
         }
         
@@ -70,49 +63,23 @@ final class OAuth2Service {
             return
         }
         
-        let task = URLSession.shared.data(for: request) { result in
+        let task = URLSession.shared.data(for: request) { [weak self] result in
             switch result {
-            case .success(let (data, response)):
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    DispatchQueue.main.async {
-                        completion(.failure(NetworkError.unknownHTTPResponse))
-                    }
-                    return
-                }
-                
-                let statusCode = httpResponse.statusCode
-                
-                guard 200..<300 ~= statusCode else {
-                    let errorBody = String(data: data, encoding: .utf8) ?? "Не удалось прочитать тело ответа"
-                    print("Ошибка Unsplash. Код: \(statusCode)")
-                    print("Тело ответа: \(errorBody)")
-                    DispatchQueue.main.async {
-                        completion(.failure(NetworkError.httpStatusCode(statusCode)))
-                    }
-                    return
-                }
-                
+            case .success(let data):
                 do {
-                    let responseBody = try self.jsonDecoder.decode(OAuthTokenResponseBody.self, from: data)
-                    OAuth2TokenStorage.shared.token = responseBody.accessToken
-                    DispatchQueue.main.async {
-                        completion(.success(responseBody.accessToken))
-                    }
+                    let responseBody = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+                    self?.dataStorage.token = responseBody.accessToken
+                    completion(.success(responseBody.accessToken))
                 } catch {
-                    print("Ошибка декодирования OAuthTokenResponseBody: \(error)")
-                    DispatchQueue.main.async {
-                        completion(.failure(NetworkError.decodingError(error)))
-                    }
+                    print("OAuth token decoding failed: \(error)")
+                    completion(.failure(NetworkError.decodingError(error)))
                 }
-                
             case .failure(let error):
-                print("Сетевая ошибка: \(error)")
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
+                print("OAuth token request failed: \(error)")
+                completion(.failure(error))
             }
         }
-        self.task = task
+        
         task.resume()
     }
 
@@ -146,25 +113,5 @@ private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         enum CodingKeys: String, CodingKey {
             case accessToken = "access_token"
         }
-    }
-}
-
-extension URLSession {
-    func data(for request: URLRequest, completionHandler: @escaping (Result<(data: Data, response: URLResponse), Error>) -> Void) -> URLSessionDataTask {
-        let task = dataTask(with: request) { data, response, error in
-            if let error = error {
-                completionHandler(.failure(error))
-                return
-            }
-
-            guard let response = response, let data = data else {
-                completionHandler(.failure(URLError(.badServerResponse)))
-                return
-            }
-
-            completionHandler(.success((data: data, response: response)))
-        }
-        task.resume()
-        return task
     }
 }
